@@ -1,17 +1,15 @@
 package controllers
 
 import (
-	"context"
-	"jwt-auth-go/database"
-	"jwt-auth-go/models"
 	"time"
+	"unified-hiring-portal/database"
+	"unified-hiring-portal/models"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
+
+	"net/http"
 )
 
 const secretKey = "secret"
@@ -23,24 +21,26 @@ func Hello(c *fiber.Ctx) error {
 func Register(c *fiber.Ctx) error {
 	var data models.User
 
-	if err := c.BodyParser(&data); err != nil {
+	err := c.BodyParser(&data)
+
+	if err != nil {
+		c.Status(http.StatusUnprocessableEntity).JSON(
+			&fiber.Map{"message": "request Failed"})
 		return err
 	}
+
 	password, _ := bcrypt.GenerateFromPassword([]byte(data.Password), 14)
 	data.Password = password
-	data.ID = primitive.NewObjectID()
 
 	DB := database.DB
-	_, err := DB.InsertOne(context.TODO(), &data)
+
+	err = DB.Create(&data).Error
 	if err != nil {
-		c.Status(fiber.StatusBadRequest)
-		// var e mongo.WriteException
-		e := err.(mongo.WriteException)
-		return c.JSON(fiber.Map{
-			"code":    e.WriteErrors[0].Code,
-			"message": e.WriteErrors[0].Message,
-		})
+		c.Status(http.StatusBadRequest).JSON(
+			&fiber.Map{"message": "could not create a User"})
+		return err
 	}
+
 	return c.JSON(data)
 }
 
@@ -53,8 +53,7 @@ func Login(c *fiber.Ctx) error {
 
 	var user models.User
 
-	filter := bson.M{"email": data.Email}
-	err := database.DB.FindOne(context.TODO(), filter).Decode(&user)
+	err := database.DB.Where("Email = ?", data.Email).First(&user).Error
 
 	if err != nil {
 		c.Status(fiber.StatusNotFound)
@@ -67,12 +66,12 @@ func Login(c *fiber.Ctx) error {
 	if err = bcrypt.CompareHashAndPassword(user.Password, []byte(data.Password)); err != nil {
 		c.Status(fiber.StatusBadRequest)
 		c.JSON(fiber.Map{
-			"message": "Password Incorrect",
+			"message": "User Exist but Password Incorrect",
 		})
 	}
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		Issuer:    user.Name,
+		Issuer:    *user.Name,
 		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 	})
 
