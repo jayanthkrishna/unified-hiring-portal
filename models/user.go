@@ -4,12 +4,13 @@ import "gorm.io/gorm"
 
 type User struct {
 	gorm.Model
-	Name      *string `json:"name"`
-	Email     *string `json:"email" gorm:"uniqueIndex;type:varchar(255)"`
-	Password  []byte  `json:"password"`
-	Contact   uint64  `json:"contact"`
-	CompanyID uint64  `gorm:"not null" json:"-"`
-	Company   Company `gorm:"foreignKey:CompanyID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Name       *string `json:"name"`
+	Email      *string `json:"email" gorm:"uniqueIndex;type:varchar(255)"`
+	Password   []byte  `json:"password"`
+	Contact    uint64  `json:"contact"`
+	CompanyID  uint64  `gorm:"default:null" json:"-"`
+	Company    Company `gorm:"foreignKey:CompanyID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	JobsPosted []Job
 }
 
 type Company struct {
