@@ -71,8 +71,8 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		Issuer:    *user.Name,
-		Id:        *user.Email,
+		Issuer:    user.Name,
+		Id:        user.Email,
 		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 	})
 

@@ -31,8 +31,9 @@ func AddJobPost(c *fiber.Ctx) error {
 		return err
 	}
 
-	var employerID uint
-	database.DB.Select("ID").Where("Email = ?", email).First(&employerID)
+	var employer models.User
+	database.DB.Select("id").Where("email = ?", email).First(&employer)
+	fmt.Println("Employer Email :", email, employer.Email, employer.ID)
 
 	var job models.Job
 
@@ -43,10 +44,10 @@ func AddJobPost(c *fiber.Ctx) error {
 			&fiber.Map{"message": "request Failed"})
 		return err
 	}
-	var employer models.User
-	database.DB.Where("ID = ?", employerID).First(&employer)
-	job.Employer = employer
-	job.Employer.ID = employerID
+	// var employer models.User
+	// database.DB.Where("ID = ?", employerID).First(&employer)
+	// job.Employer = employer
+	job.EmployerID = employer.ID
 
 	fmt.Println(job)
 	err = database.DB.Create(&job).Error
@@ -59,7 +60,7 @@ func AddJobPost(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{
 		"Message": "Successfully created the Job",
-		"JobID":   job.ID,
+		"JobID":   job,
 	})
 
 }

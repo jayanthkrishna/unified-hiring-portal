@@ -8,44 +8,45 @@ import (
 	"unified-hiring-portal/models"
 )
 
+var users = []models.User{
+	{
+		Name:     "Steven victor",
+		Email:    "steven@gmail.com",
+		Password: []byte("password"),
+	},
+	{
+		Name:     "Martin Luther",
+		Email:    "luther@gmail.com",
+		Password: []byte("password"),
+	},
+	{
+		Name:     "Jayanth Luther",
+		Email:    "jayanth@gmail.com",
+		Password: []byte("password"),
+	},
+	{
+		Name:     "Krishna Luther",
+		Email:    "krishna@gmail.com",
+		Password: []byte("password"),
+	},
+	{
+		Name:     "yadav Luther",
+		Email:    "yadav@gmail.com",
+		Password: []byte("password"),
+	},
+}
+
+var companies = []models.Company{
+
+	{
+		Name: "Apple",
+	},
+	{
+		Name: "Google",
+	},
+}
+
 func TestDataUser() {
-	var users = []models.User{
-		{
-			Name:     "Steven victor",
-			Email:    "steven@gmail.com",
-			Password: []byte("password"),
-		},
-		{
-			Name:     "Martin Luther",
-			Email:    "luther@gmail.com",
-			Password: []byte("password"),
-		},
-		{
-			Name:     "Jayanth Luther",
-			Email:    "jayanth@gmail.com",
-			Password: []byte("password"),
-		},
-		{
-			Name:     "Krishna Luther",
-			Email:    "krishna@gmail.com",
-			Password: []byte("password"),
-		},
-		{
-			Name:     "yadav Luther",
-			Email:    "yadav@gmail.com",
-			Password: []byte("password"),
-		},
-	}
-
-	var companies = []models.Company{
-
-		{
-			Name: "Apple",
-		},
-		{
-			Name: "Google",
-		},
-	}
 
 	for i, _ := range companies {
 		err := database.DB.Create(&companies[i]).Error
@@ -82,6 +83,42 @@ func TestDataUser() {
 
 }
 
-func testDataJob() {
+func TestDataJob() {
+
+	jobs := []models.Job{
+		{
+			JobTitle:    "FrontEnd Engineer",
+			Description: "This is a forntend position",
+		},
+		{
+			JobTitle:    "BackEnd Engineer",
+			Description: "This is a Backend position",
+		},
+		{
+			JobTitle:    "Devops Engineer",
+			Description: "This is a Devops position",
+		},
+		{
+			JobTitle:    "FrontEnd Engineer",
+			Description: "This is a Frontend position",
+		},
+		{
+			JobTitle:    "Full Stack Engineer",
+			Description: "This is a Full Stack position",
+		},
+		{
+			JobTitle:    "FrontEnd Engineer",
+			Description: "This is a forntend position",
+		},
+	}
+
+	for i, _ := range jobs {
+		jobs[i].EmployerID = users[i%2].ID
+		err := database.DB.Create(&users[i]).Error
+
+		if err != nil {
+			log.Fatal("Cannot seed users table :", err)
+		}
+	}
 
 }
