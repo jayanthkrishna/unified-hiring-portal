@@ -34,7 +34,7 @@ func NewConnection(config *Config) (*gorm.DB, error) {
 func Migrate(db *gorm.DB) error {
 	// db.Migrator().DropTable(&models.User{}, &models.Company{})
 	db.Migrator().DropTable(&models.User{}, &models.Company{}, &models.Job{}, &models.Applicant{})
-	err := db.AutoMigrate(&models.User{}, &models.Company{})
+	err := db.AutoMigrate(&models.User{}, &models.Company{}, &models.Job{}, &models.Applicant{})
 
 	return err
 }
