@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"unified-hiring-portal/database"
+	"unified-hiring-portal/models"
 	"unified-hiring-portal/routes"
 	"unified-hiring-portal/test"
 
@@ -16,6 +18,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
+	"gorm.io/gorm/clause"
 )
 
 func main() {
@@ -51,9 +54,13 @@ func main() {
 
 	// database.DB.Preload("users").Find(&res_jobs)
 
-	// r, _ := json.Marshal(res_jobs[3])
+	res := []models.User{}
 
-	// fmt.Println("Result after seeding  Test :", string(r))
+	database.DB.Preload("JobsPosted").Preload(clause.Associations).Find(&res)
+
+	r, _ := json.Marshal(res[1])
+
+	fmt.Println("Result after fsdfsdfsdfsdfdf :", string(r))
 	// server()
 
 }

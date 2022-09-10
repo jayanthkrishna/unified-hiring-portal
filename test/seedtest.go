@@ -6,8 +6,6 @@ import (
 	"log"
 	"unified-hiring-portal/database"
 	"unified-hiring-portal/models"
-
-	"gorm.io/gorm/clause"
 )
 
 var users = []models.User{
@@ -123,25 +121,17 @@ func TestDataJob() {
 		}
 	}
 
-	res_jobs := []models.Job{}
+	res_users := []models.Job{}
 
 	// res_users := []models.User{}
 
 	// database.DB.Preload("Jobs").Find(&res_users)
 
-	database.DB.Preload(clause.Associations).Find(&res_jobs)
+	err := database.DB.Preload("Applicants").Find(&res_users).Error
 
+	fmt.Println(err)
 	// for i, _ := range res_jobs {
 	// 	database.DB.First(&models.User{}).Where("id = ?", res_jobs[i].EmployerID).Take(&res_jobs[i].Employer)
 	// }
-
-	res := []models.Job{}
-
-	database.DB.Preload("Applicants").Find(&res)
-
-	// fmt.Println("res :", res)
-	r, _ := json.Marshal(res_jobs[3])
-
-	fmt.Println("Result after seeding  jobs:", string(r))
 
 }

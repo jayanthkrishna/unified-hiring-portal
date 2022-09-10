@@ -10,6 +10,8 @@ type User struct {
 	Contact   uint64  `json:"contact"`
 	CompanyID uint64  `json:"company_id"`
 	Company   Company `gorm:"foreignKey:CompanyID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+
+	JobsPosted []Job `json:"jobs_posted" gorm:"foreignKey:EmployerID"`
 }
 
 type Company struct {
