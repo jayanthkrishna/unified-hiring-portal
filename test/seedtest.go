@@ -1,7 +1,6 @@
 package test
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"math/rand"
@@ -78,9 +77,9 @@ func TestDataUser() {
 	for i, _ := range res_users {
 		database.DB.First(&models.Company{}).Where("id = ?", res_users[i].CompanyID).Take(&res_users[i].Company)
 	}
-	r, _ := json.Marshal(res_users[3])
+	// r, _ := json.Marshal(res_users[3])
 
-	fmt.Println("Result after seeding :", string(r))
+	// fmt.Println("Result after seeding :", string(r))
 
 }
 
@@ -195,6 +194,8 @@ func TestDataApplicants() {
 	}
 
 	database.DB.CreateInBatches(applicants, len(applicants))
+
+	fmt.Println("Successfully added Applicant Data")
 }
 
 func TestDataApplications() {
@@ -203,29 +204,57 @@ func TestDataApplications() {
 
 	database.DB.Select("ID").Find(&jobs)
 	database.DB.Select("ID").Find(&applicants)
-	type application struct {
-		job_id       uint
-		applicant_id uint
-	}
+
+	fmt.Println("Job Instance: ", jobs[0].ID)
+	fmt.Println("Applicant Instance: ", applicants[0].ID)
+	// type application struct {
+	// 	job_id       uint
+	// 	applicant_id uint
+	// }
+
+	// application_object := map[string]interface{}{
+	// 	"job_id":       1,
+	// 	"applicant_id": 1,
+	// }
+
+	// err := database.DB.Table("job_applications").Create(&application_object).Error
+
+	// if err != nil {
+	// 	fmt.Println("Error at inserting into job applications table :", err)
+	// } else {
+	// 	fmt.Println("Successfully inserted into job_applicantions table")
+
+	// }
 	for _, i := range jobs {
 		for _, j := range applicants {
 			if rand.Intn(100) < 60 {
-				application_object := application{
-					job_id:       i.ID,
-					applicant_id: j.ID,
+				application_object := map[string]interface{}{
+					"job_id":       i.ID,
+					"applicant_id": j.ID,
 				}
-				database.DB.Table("job_applications").Create(&application_object)
+
+				err := database.DB.Table("job_applications").Create(&application_object).Error
+
+				if err != nil {
+					fmt.Println("Error at inserting into job applications table :", err)
+				} else {
+					fmt.Println("Successfully inserted into job_applicantions table")
+
+				}
+
 			}
 		}
 
 	}
 
-	applications := []application{}
+	fmt.Println("Finished uploading into job applications table")
 
-	database.DB.Table("job_applications").Take(&applications)
+	applications := []map[string]interface{}{}
+
+	database.DB.Table("job_applications").Find(&applications)
 
 	for _, i := range applications {
-		fmt.Printf("JobID : %d ApplicantID: %d\n", i.job_id, i.applicant_id)
+		fmt.Printf("JobID : %d ApplicantID: %d\n", i["job_id"], i["applicant_id"])
 	}
 
 }

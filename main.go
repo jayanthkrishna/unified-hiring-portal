@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -18,7 +17,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
-	"gorm.io/gorm/clause"
 )
 
 func main() {
@@ -50,18 +48,25 @@ func main() {
 
 	test.TestDataUser()
 	test.TestDataJob()
-	// res_jobs := []models.Job{}
 
-	// database.DB.Preload("users").Find(&res_jobs)
+	// res := []models.User{}
 
-	res := []models.User{}
+	// database.DB.Preload("JobsPosted").Preload(clause.Associations).Find(&res)
 
-	database.DB.Preload("JobsPosted").Preload(clause.Associations).Find(&res)
-
-	r, _ := json.Marshal(res[1])
-
-	fmt.Println("Result after fsdfsdfsdfsdfdf :", string(r))
 	// server()
+
+	test.TestDataApplicants()
+	test.TestDataApplications()
+
+	res := []models.Job{}
+
+	database.DB.Preload("Applicants").Find(&res)
+
+	for _, i := range res[1].Applicants {
+
+		fmt.Printf("ID: %d , Name: %s\n", i.ID, i.Name)
+
+	}
 
 }
 
