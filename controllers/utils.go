@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
@@ -26,14 +27,14 @@ func token_verify(c *fiber.Ctx) (jwt.MapClaims, error) {
 	return claims, nil
 }
 
-func retrieve_email(c *fiber.Ctx) (string, error) {
+func retrieve_id(c *fiber.Ctx) (uint, error) {
 	claims, err := token_verify(c)
 
 	if err != nil {
-		return "", c.JSON(fiber.Map{
+		return 0, c.JSON(fiber.Map{
 			"Error": err,
 		})
 	}
-
-	return claims["jti"].(string), nil
+	u, _ := strconv.ParseUint(claims["jti"].(string), 10, 64)
+	return uint(u), nil
 }
