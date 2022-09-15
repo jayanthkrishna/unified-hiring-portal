@@ -5,15 +5,9 @@ import (
 	"log"
 	"os"
 	"unified-hiring-portal/database"
-	"unified-hiring-portal/models"
 	"unified-hiring-portal/routes"
 	"unified-hiring-portal/test"
 
-	// "unified-hiring-portal/routes"
-
-	// "github.com/gofiber/fiber/v2"
-	// "github.com/gofiber/fiber/v2/middleware/cors"
-	// "github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
@@ -49,43 +43,31 @@ func main() {
 	test.TestDataUser()
 	test.TestDataJob()
 
-	// res := []models.User{}
-
-	// database.DB.Preload("JobsPosted").Preload(clause.Associations).Find(&res)
-
-	// server()
-
 	test.TestDataApplicants()
 	test.TestDataApplications()
 
-	res := []models.Job{}
+	// res := []models.Job{}
 
-	database.DB.Preload("Applicants").Find(&res)
+	// database.DB.Preload("Applicants").Find(&res)
 
-	for _, i := range res[1].Applicants {
+	// for _, i := range res[1].Applicants {
 
-		fmt.Printf("ID: %d , Name: %s\n", i.ID, i.Name)
+	// 	fmt.Printf("ID: %d , Name: %s\n", i.ID, i.Name)
 
-	}
+	// }
+	server()
 
 }
 
 func server() {
 	app := fiber.New()
-	// api := fiber.New()
-	// database.Connect()
+
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
 	}))
-	// api.Use(cors.New(cors.Config{
-	// 	AllowCredentials: true,
-	// }))
-	// routes.GetApiRoutes(api)
 
 	routes.GetRoutes(app)
 
 	app.Listen(":8000")
-	//
-	// api.Listen(":8001")
 
 }

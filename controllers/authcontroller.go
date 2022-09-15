@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"strconv"
 	"time"
 	"unified-hiring-portal/database"
 	"unified-hiring-portal/models"
@@ -72,7 +73,7 @@ func Login(c *fiber.Ctx) error {
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    user.Name,
-		Id:        user.Email,
+		Id:        strconv.FormatUint(uint64(user.ID), 10),
 		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 	})
 
