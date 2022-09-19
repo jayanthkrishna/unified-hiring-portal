@@ -249,12 +249,41 @@ func TestDataApplications() {
 
 	fmt.Println("Finished uploading into job applications table")
 
-	applications := []map[string]interface{}{}
+	// applications := []map[string]interface{}{}
 
-	database.DB.Table("job_applications").Find(&applications)
+	// database.DB.Table("job_applications").Find(&applications)
 
-	for _, i := range applications {
-		fmt.Printf("JobID : %d ApplicantID: %d\n", i["job_id"], i["applicant_id"])
-	}
+	// for _, i := range applications {
+	// 	fmt.Printf("JobID : %d ApplicantID: %d\n", i["job_id"], i["applicant_id"])
+	// }
 
 }
+
+// func TestDataTags(){
+// 	tags := []models.Tag{
+// 		{
+// 			Name: "FrontEnd Engineer",
+// 		},
+// 		{
+// 			Name: "Backend Engineeer",
+// 		},
+// 		{
+// 			Name : "Full Stack Development",
+// 		},
+// 		{
+// 			Name: "Software Engineer",
+// 		},
+// 		{
+// 			Name: "Software Engineer Testing",
+// 		},
+// 		{
+// 			Name: "Analyst",
+// 		},
+// 		{
+// 			Name: "Sales",
+// 		},
+// 		{
+// 			Name:""
+// 		}
+// 	}
+// }

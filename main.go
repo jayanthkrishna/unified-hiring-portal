@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"unified-hiring-portal/database"
+	"unified-hiring-portal/models"
 	"unified-hiring-portal/routes"
 	"unified-hiring-portal/test"
 
@@ -46,16 +47,24 @@ func main() {
 	test.TestDataApplicants()
 	test.TestDataApplications()
 
-	// res := []models.Job{}
+	res := []models.User{}
 
-	// database.DB.Preload("Applicants").Find(&res)
+	database.DB.Preload("JobsPosted.Applicants").Preload("JobsPosted").Find(&res)
 
-	// for _, i := range res[1].Applicants {
+	fmt.Println("User: ", res[1].Name, res[1].Email)
 
-	// 	fmt.Printf("ID: %d , Name: %s\n", i.ID, i.Name)
+	for _, i := range res[1].JobsPosted {
 
-	// }
-	server()
+		fmt.Println("Job Title : ", i.JobTitle)
+		fmt.Println("Applicants")
+
+		for _, j := range i.Applicants {
+			fmt.Printf("Applicant ID : %d --Applicant Name : %s. Applicant Email %s\n", j.ID, j.Name, j.Email)
+		}
+
+	}
+
+	// server()
 
 }
 
