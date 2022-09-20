@@ -33,9 +33,9 @@ func NewConnection(config *Config) (*gorm.DB, error) {
 
 func Migrate(db *gorm.DB) error {
 	// db.Migrator().DropTable(&models.User{}, &models.Company{})
-	db.Migrator().DropTable(&models.User{}, &models.Company{}, &models.Job{}, &models.Applicant{}, &models.Tag{}, "job_applications")
+	db.Migrator().DropTable(&models.TestBase{}, &models.User{}, &models.Company{}, &models.Job{}, &models.Applicant{}, &models.Tag{}, "job_applications")
 
-	err := db.AutoMigrate(&models.User{}, &models.Company{}, &models.Job{}, &models.Applicant{}, &models.Tag{})
+	err := db.AutoMigrate(&models.TestBase{}, &models.User{}, &models.Company{}, &models.Job{}, &models.Applicant{}, &models.Tag{})
 
 	return err
 }

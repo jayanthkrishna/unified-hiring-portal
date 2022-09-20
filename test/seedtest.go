@@ -287,3 +287,51 @@ func TestDataApplications() {
 // 		}
 // 	}
 // }
+
+func TestBaseData() {
+	b := []models.TestBase{
+		{
+			Name: 1,
+		},
+		{
+			Name: 2,
+		},
+		{
+			Name: 3,
+		},
+		{
+			Name: 4,
+		},
+		{
+			Name: 5,
+		},
+		{
+			Name: 6,
+		},
+		{
+			Name: 7,
+		},
+		{
+			Name: 8,
+		},
+		{
+			Name: 9,
+		},
+		{
+			Name: 10,
+		},
+	}
+
+	fmt.Println("b :", b)
+
+	database.DB.CreateInBatches(&b, 10)
+
+	res := []models.TestBase{}
+
+	database.DB.Find(&res)
+
+	for i := range res {
+		fmt.Printf("Base UUID is %v for Object %d\n", res[i].ID, res[i].Name)
+	}
+
+}

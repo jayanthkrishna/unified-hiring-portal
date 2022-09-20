@@ -64,6 +64,8 @@ func main() {
 
 	}
 
+	test.TestBaseData()
+
 	// server()
 
 }
