@@ -5,7 +5,7 @@ import (
 )
 
 type Job struct {
-	gorm.Model
+	Base
 	JobTitle    string      `json:"name" gorm:"not null;type:varchar(255)"`
 	Company     string      `json:"company" gorm:"not null;type:varchar(255)"`
 	Description string      `json:"description" gorm:"not null;type:varchar(10000)"`

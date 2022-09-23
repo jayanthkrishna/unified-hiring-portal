@@ -3,11 +3,11 @@ package controllers
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 	"unified-hiring-portal/database"
 	"unified-hiring-portal/models"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 )
 
 func GetAllJobsPostedByUser(c *fiber.Ctx) error {
@@ -81,9 +81,7 @@ func UpdateJob(c *fiber.Ctx) error {
 		})
 	}
 
-	temp, _ := strconv.ParseUint(jobid, 10, 64)
-
-	jid := uint(temp)
+	jid, _ := uuid.Parse(jobid)
 
 	var updated_job models.Job
 
@@ -135,9 +133,7 @@ func DeleteJob(c *fiber.Ctx) error {
 		})
 	}
 
-	temp, _ := strconv.ParseUint(jobid, 10, 64)
-
-	jid := uint(temp)
+	jid, _ := uuid.Parse(jobid)
 
 	job := models.Job{}
 
