@@ -11,7 +11,7 @@ type Job struct {
 	Description string      `json:"description" gorm:"not null;type:varchar(10000)"`
 	Position    string      `json:"position"`
 	Tags        []Tag       `json:"tags" gorm:"many2many:job_tags;"`
-	Applicants  []Applicant `json:"applicants" gorm:"many2many:job_applications;"`
+	Applicants  []Applicant `json:"applicants,omitempty" gorm:"many2many:job_applications;"`
 	EmployerID  uint        `json:"employer_id"`
 	Employer    User        `gorm:"foreignKey:EmployerID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }

@@ -64,7 +64,15 @@ func main() {
 
 	}
 
-	test.TestBaseData()
+	// jobs := []models.Job{}
+
+	// database.DB.Find(&jobs)
+
+	// b, err := json.MarshalIndent(jobs[0], "", "  ")
+
+	// fmt.Println("Job with OmitEmpty : ", string(b))
+
+	// test.TestBaseData()
 
 	// server()
 
