@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"unified-hiring-portal/database"
-	"unified-hiring-portal/models"
 	"unified-hiring-portal/routes"
 	"unified-hiring-portal/test"
 
@@ -47,22 +46,22 @@ func main() {
 	test.TestDataApplicants()
 	test.TestDataApplications()
 
-	res := []models.User{}
+	// res := []models.User{}
 
-	database.DB.Preload("JobsPosted.Applicants").Preload("JobsPosted").Find(&res)
+	// database.DB.Preload("JobsPosted.Applicants").Preload("JobsPosted").Find(&res)
 
-	fmt.Println("User: ", res[1].Name, res[1].Email)
+	// fmt.Println("User: ", res[1].Name, res[1].Email)
 
-	for _, i := range res[1].JobsPosted {
+	// for _, i := range res[1].JobsPosted {
 
-		fmt.Println("Job Title : ", i.JobTitle)
-		fmt.Println("Applicants")
+	// 	fmt.Println("Job Title : ", i.JobTitle)
+	// 	fmt.Println("Applicants")
 
-		for _, j := range i.Applicants {
-			fmt.Printf("Applicant ID : %d --Applicant Name : %s. Applicant Email %s\n", j.ID, j.Name, j.Email)
-		}
+	// 	for _, j := range i.Applicants {
+	// 		fmt.Printf("Applicant ID : %d --Applicant Name : %s. Applicant Email %s\n", j.ID, j.Name, j.Email)
+	// 	}
 
-	}
+	// }
 
 	// jobs := []models.Job{}
 
@@ -74,7 +73,10 @@ func main() {
 
 	// test.TestBaseData()
 
-	// server()
+	test.TestClientData()
+	go apiServer()
+
+	server()
 
 }
 
@@ -88,5 +90,18 @@ func server() {
 	routes.GetRoutes(app)
 
 	app.Listen(":8000")
+
+}
+
+func apiServer() {
+	api := fiber.New()
+
+	api.Use(cors.New(cors.Config{
+		AllowCredentials: true,
+	}))
+
+	routes.GetApiRoutes(api)
+
+	api.Listen(":8001")
 
 }

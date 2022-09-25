@@ -20,7 +20,8 @@ func GetRoutes(app *fiber.App) {
 }
 
 func GetApiRoutes(app *fiber.App) {
+	app.Get("/", controllers.HelloApiPage)
 	app.Get("/jobs", controllers.GetAllJobs)
 	app.Post("/jobs/:jobid", controllers.AddJobApplicant)
-	app.Post("/identity/token", controllers.GenerateToken)
+	app.Get("/identity/token", controllers.GenerateToken)
 }

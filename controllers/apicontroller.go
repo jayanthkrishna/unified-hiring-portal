@@ -9,6 +9,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+func HelloApiPage(c *fiber.Ctx) error {
+
+	return c.JSON(fiber.Map{
+		"Message": "Hello World",
+	})
+}
 func AddJobApplicant(c *fiber.Ctx) error {
 	clientID, err := retrieve_Client_id(c)
 

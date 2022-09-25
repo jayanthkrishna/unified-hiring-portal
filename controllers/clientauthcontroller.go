@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"time"
 	"unified-hiring-portal/database"
 	"unified-hiring-portal/models"
@@ -48,24 +49,29 @@ func GenerateToken(c *fiber.Ctx) error {
 		return err
 	}
 
+	cookie := fiber.Cookie{
+		Name:     "client-jwt",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 24),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+
 	return c.JSON(fiber.Map{
-		"access_token": token,
+		"message": "Success",
 	})
 
 }
 
 func client_verify(c *fiber.Ctx) (jwt.MapClaims, error) {
-	type Token struct {
-		Token string `json:"access_token"`
-	}
-	access_token := Token{}
-	c.BodyParser(&access_token)
+	cookie := c.Cookies("client-jwt")
 	claims := jwt.MapClaims{}
-	_, err := jwt.ParseWithClaims(access_token.Token, &claims,
+	token, err := jwt.ParseWithClaims(cookie, claims,
 		func(token *jwt.Token) (interface{}, error) {
 			return []byte(secretKey), nil
 		})
-
+	fmt.Println(token.Valid)
 	if err != nil {
 		c.Status(fiber.StatusUnauthorized)
 
