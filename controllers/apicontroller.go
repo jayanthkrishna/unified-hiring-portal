@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"unified-hiring-portal/database"
 	"unified-hiring-portal/models"
@@ -9,12 +10,21 @@ import (
 )
 
 func AddJobApplicant(c *fiber.Ctx) error {
+	clientID, err := retrieve_Client_id(c)
+
+	if err != nil {
+		c.JSON(fiber.Map{
+			"Error": err,
+		})
+	}
+
+	fmt.Println("Client ID :", clientID)
 
 	jobid := c.Params("jobid")
 
 	applicant := models.Applicant{}
 
-	err := c.BodyParser(&applicant)
+	err = c.BodyParser(&applicant)
 
 	if err != nil {
 		return c.Status(http.StatusUnprocessableEntity).JSON(&fiber.Map{
@@ -60,9 +70,19 @@ func AddJobApplicant(c *fiber.Ctx) error {
 
 func GetAllJobs(c *fiber.Ctx) error {
 
+	clientID, err := retrieve_Client_id(c)
+
+	if err != nil {
+		c.JSON(fiber.Map{
+			"Error": err,
+		})
+	}
+
+	fmt.Println("Client ID :", clientID)
+
 	jobs := []models.Job{}
 
-	err := database.DB.Preload("Employer").Find(&jobs).Error
+	err = database.DB.Preload("Employer").Find(&jobs).Error
 
 	if err != nil {
 		return c.JSON(fiber.Map{
