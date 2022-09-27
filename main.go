@@ -17,6 +17,14 @@ func main() {
 
 	err := godotenv.Load(".env")
 
+	// fmt.Println(err)
+	// os.Setenv("DB_HOST", "localhost")
+	// os.Setenv("DB_PORT", "5432")
+	// os.Setenv("DB_USER", "postgres")
+	// os.Setenv("DB_PASSWORD", "asdf")
+	// os.Setenv("DB_SSLMODE", "disable")
+	// os.Setenv("DB_NAME", "test1DB")
+
 	if err != nil {
 		log.Fatal(err)
 	}
