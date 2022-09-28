@@ -119,3 +119,26 @@ func User(c *fiber.Ctx) error {
 
 	return c.JSON(claims)
 }
+
+func UpdateUser(c *fiber.Ctx) error {
+	uid, err := retrieve_id(c)
+
+	if uid == 0 {
+		return err
+	}
+
+	var employer models.User
+	c.BodyParser(&employer)
+	err = database.DB.Where("ID = ?", uid).Updates(&employer).Error
+
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"Error": err,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Updated Successfully",
+	})
+
+}

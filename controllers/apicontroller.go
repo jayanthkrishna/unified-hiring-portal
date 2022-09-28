@@ -99,3 +99,40 @@ func GetAllJobs(c *fiber.Ctx) error {
 	return c.JSON(jobs)
 
 }
+
+func GetAllJobsByTags(c *fiber.Ctx) error {
+	clientID, err := retrieve_Client_id(c)
+
+	if err != nil {
+		c.JSON(fiber.Map{
+			"Error": err,
+		})
+	}
+
+	fmt.Println("Client ID :", clientID)
+
+	var tags []models.Tag
+
+	err = c.BodyParser(&tags)
+
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"message": err,
+		})
+	}
+
+	var results []map[string]interface{}
+
+	err = database.DB.Table("job_tags").Distinct("job_id").Where(tags).Find(&results).Error
+
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"message": err,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"result": results,
+	})
+
+}
