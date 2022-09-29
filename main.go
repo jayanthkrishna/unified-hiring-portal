@@ -25,9 +25,13 @@ func main() {
 	// os.Setenv("DB_SSLMODE", "disable")
 	// os.Setenv("DB_NAME", "test1DB")
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	// url := os.Getenv("DB_URL")
+	// _, err = database.NewConnection1(url)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// fmt.Println("Connected to Database")
 
 	config := &database.Config{
 		Host:     os.Getenv("DB_HOST"),
@@ -43,16 +47,22 @@ func main() {
 		log.Fatal("Could not load the database")
 	}
 
+	fmt.Println("connected to database")
+
 	err = database.Migrate(database.DB)
 	if err != nil {
 		log.Fatal("could not migrate db")
 	}
 
-	test.TestDataUser()
-	test.TestDataJob()
+	fmt.Println("Migrated Successfully")
 
-	test.TestDataApplicants()
-	test.TestDataApplications()
+	test.TestDataUser()
+
+	fmt.Println("tested User and Company Data Successfully")
+	// test.TestDataJob()
+
+	// test.TestDataApplicants()
+	// test.TestDataApplications()
 
 	// res := []models.User{}
 
@@ -81,10 +91,10 @@ func main() {
 
 	// test.TestBaseData()
 
-	test.TestClientData()
-	go apiServer()
+	// test.TestClientData()
+	// go apiServer()
 
-	server()
+	// server()
 
 }
 

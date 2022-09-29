@@ -1,9 +1,11 @@
 package database
 
 import (
+	"database/sql"
 	"fmt"
 	"unified-hiring-portal/models"
 
+	"github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -31,11 +33,21 @@ func NewConnection(config *Config) (*gorm.DB, error) {
 
 }
 
+func NewConnection1(url string) (*sql.DB, error) {
+
+	connection, _ := pq.ParseURL(url)
+	connection += " sslmode=require"
+
+	return sql.Open("postgres", connection)
+
+}
+
 func Migrate(db *gorm.DB) error {
 	// db.Migrator().DropTable(&models.User{}, &models.Company{})
 	db.Migrator().DropTable(&models.Client{}, &models.TestBase{}, &models.User{}, &models.Company{}, &models.Tag{}, &models.Job{}, &models.Applicant{}, "job_applications", "job_tags")
 
 	err := db.AutoMigrate(&models.Client{}, &models.TestBase{}, &models.User{}, &models.Company{}, &models.Tag{}, &models.Job{}, &models.Applicant{})
+	// err := db.AutoMigrate(&models.User{}, &models.Company{}, &models.Job{}, &models.Applicant{}, &models.Tag{})
 
 	return err
 }
