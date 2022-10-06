@@ -136,3 +136,23 @@ func GetAllJobsByTags(c *fiber.Ctx) error {
 	})
 
 }
+
+func Pdf_func(c *fiber.Ctx) error {
+	formheader, err := c.FormFile("resume")
+
+	if err != nil {
+		c.JSON(fiber.Map{
+			"Error": fiber.StatusBadRequest,
+		})
+	}
+
+	err = c.SaveFile(formheader, formheader.Filename)
+
+	if err != nil {
+		c.JSON(fiber.Map{
+			"error": err,
+		})
+	}
+
+	return nil
+}
